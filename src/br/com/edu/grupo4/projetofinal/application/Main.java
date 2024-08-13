@@ -34,20 +34,24 @@ public class Main {
                 case 1:
                     System.out.println("Digite o nome do contato: ");
                     String nome = scanner.nextLine();
-                    System.out.println("Digite o telefone do contato: ");
-                    String telefone = scanner.nextLine();
+
+                    boolean numeroValidado = false;
+                    String telefone = "";
+
+                    while (!numeroValidado) {
+                        System.out.println("Digite o telefone do contato: ");
+                        telefone = scanner.nextLine();
+
+                        boolean numeroJaExiste = numeroJaExiste(telefone, contatos, contador_contatos);
+                        if (!numeroJaExiste) {
+                            numeroValidado = true;
+                        }
+                    }
+
                     System.out.println("Digite o email do contato: ");
                     String email = scanner.nextLine();
 
-                    for (int j = 0; j < 3; j++) {
-                        if (j == 0) {
-                            contatos[contador_contatos][j] = nome;
-                        } else if (j == 1) {
-                            contatos[contador_contatos][j] = telefone;
-                        } else if (j == 2) {
-                            contatos[contador_contatos][j] = email;
-                        }
-                    }
+                    adicionarContato(nome, telefone, email, contatos, contador_contatos);
                     contador_contatos++;
                     break;
 
@@ -55,6 +59,7 @@ public class Main {
                     System.out.print("Digite o ID do contato que deseja detalhar: ");
                     int id = scanner.nextInt();
                     String contatoDetalhado = detalhar(id, contatos);
+                    System.out.println(Constants.SEPARADOR_DE_LINHAS);
                     System.out.println(contatoDetalhado);
                     System.out.println(Constants.SEPARADOR_DE_LINHAS);
 
@@ -73,8 +78,18 @@ public class Main {
     }
 
 
-    static void adicionar(String nome, String email, String telefone) {
-
+    static void adicionarContato(String nome, String telefone, String email, String[][] contatos, int contador_contatos) {
+        for (int j = 0; j < 3; j++) {
+            if (j == 0) {
+                contatos[contador_contatos][j] = nome;
+            } else if (j == 1) {
+                contatos[contador_contatos][j] = telefone;
+            } else if (j == 2) {
+                contatos[contador_contatos][j] = email;
+            }
+        }
+        System.out.println("Contato adicionado com sucesso!");
+        System.out.println(Constants.SEPARADOR_DE_LINHAS);
     }
 
     static void remover(int id) {
@@ -116,4 +131,13 @@ public class Main {
         }
     }
 
+    static boolean numeroJaExiste(String telefone, String[][] contatos, int contador_contatos) {
+        for (int i = 0; i < contador_contatos; i++) {
+            if (telefone.equals(contatos[i][1])) {
+                System.out.println("Este telefone já existe na database! Por favor digite outro número.");
+                return true;
+            }
+        }
+        return false;
+    }
 }
