@@ -4,16 +4,16 @@ package br.com.edu.grupo4.projetofinal.application;
 // OBS2: coloquei o id pra começar do numero 1, alterar pra começar do 0 ?? //
 
 import br.com.edu.grupo4.projetofinal.constants.Constants;
-
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
         Boolean programIsRunning = true;
         String[][] contatos = new String[100][3];
         int contador_contatos = 0;
+        int id;
+        String nome, telefone, email;
 
         System.out.println(Constants.AGENDA_DISPLAY);
         do {
@@ -33,10 +33,10 @@ public class Main {
             switch (option) {
                 case 1:
                     System.out.println("Digite o nome do contato: ");
-                    String nome = scanner.nextLine();
+                    nome = scanner.nextLine();
 
                     boolean numeroValidado = false;
-                    String telefone = "";
+                    telefone = "";
 
                     while (!numeroValidado) {
                         System.out.println("Digite o telefone do contato: ");
@@ -49,19 +49,60 @@ public class Main {
                     }
 
                     System.out.println("Digite o email do contato: ");
-                    String email = scanner.nextLine();
+                    email = scanner.nextLine();
 
                     adicionarContato(nome, telefone, email, contatos, contador_contatos);
                     contador_contatos++;
                     break;
-
                 case 2:
                     System.out.print("Digite o ID do contato que deseja detalhar: ");
-                    int id = scanner.nextInt();
-                    String contatoDetalhado = detalhar(id, contatos);
+                    int idDetalhar = scanner.nextInt();
+                    String contatoDetalhado = detalhar(idDetalhar, contatos);
+
                     System.out.println(Constants.SEPARADOR_DE_LINHAS);
                     System.out.println(contatoDetalhado);
                     System.out.println(Constants.SEPARADOR_DE_LINHAS);
+                    break;
+                case 3:
+                    System.out.println("Digite o ID do contato que deseja editar: ");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (id > contador_contatos) {
+                        System.out.println("Por favor digite um ID valido");
+                    } else {
+
+                        System.out.println("Digite o nome do contato: ");
+                        nome = scanner.nextLine();
+
+                        boolean numeroValidadoEditar = false;
+                        telefone = "";
+
+                        while (!numeroValidadoEditar) {
+                            System.out.println("Digite o telefone do contato: ");
+                            telefone = scanner.nextLine();
+
+                            boolean numeroJaExiste = numeroJaExiste(telefone, contatos[id-1][1], contatos, contador_contatos);
+                            if (!numeroJaExiste) {
+                                numeroValidadoEditar = true;
+                            }
+                        }
+
+                        System.out.println("Digite o email do contato: ");
+                        email = scanner.nextLine();
+
+                        for (int j = 0; j < 3; j++) {
+                            if (j == 0) {
+                                contatos[id-1][j] = nome;
+                            } else if (j == 1) {
+                                contatos[id-1][j] = telefone;
+                            } else if (j == 2) {
+                                contatos[id-1][j] = email;
+                            }
+
+                        }
+                        System.out.println("Contato editado com sucesso!");
+                    }
 
                     break;
                 case 5:
@@ -92,10 +133,6 @@ public class Main {
         System.out.println(Constants.SEPARADOR_DE_LINHAS);
     }
 
-    static void remover(int id) {
-
-    }
-
     static String detalhar(int id, String[][] contatos) {
         try {
             String contato_info = "ID: " + (id) + " - ";
@@ -112,6 +149,9 @@ public class Main {
         } catch (ArrayIndexOutOfBoundsException err) {
             return "Contato não encontrado!";
         }
+    }
+
+    static void remover(int id) {
 
     }
 
@@ -134,6 +174,16 @@ public class Main {
     static boolean numeroJaExiste(String telefone, String[][] contatos, int contador_contatos) {
         for (int i = 0; i < contador_contatos; i++) {
             if (telefone.equals(contatos[i][1])) {
+                System.out.println("Este telefone já existe na database! Por favor digite outro número.");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean numeroJaExiste(String telefone, String telefoneAtual, String[][] contatos, int contador_contatos) {
+        for (int i = 0; i < contador_contatos; i++) {
+            if (telefone.equals(contatos[i][1]) && !telefone.equals(telefoneAtual)) {
                 System.out.println("Este telefone já existe na database! Por favor digite outro número.");
                 return true;
             }
