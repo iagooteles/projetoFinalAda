@@ -2,6 +2,7 @@ package br.com.edu.grupo4.projetofinal.constants;
 
 public class Constants {
 
+    public static String SEPARADOR_DE_LINHAS = "______________________________________";
     public static String AGENDA_DISPLAY = "##################\n##### AGENDA #####\n##################\n";
     public static String CONTATOS_DISPLAY = ">>>> Contatos <<<<\n";
     public static String CONTATOS_CAMPOS_DISPLAY = "Id    |   Nome    |     Telefone    |     E-mail\n";
