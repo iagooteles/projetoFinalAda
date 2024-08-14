@@ -13,5 +13,5 @@ public class Constants {
             "3 - Editar Contato\n" +
             "4 - Remover Contato\n" +
             "5 - Sair\n";
-
+    public static String ID_INVALIDO = "Por favor digite um ID válido";
 }
