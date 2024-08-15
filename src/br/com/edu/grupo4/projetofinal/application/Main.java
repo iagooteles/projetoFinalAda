@@ -1,6 +1,15 @@
 package br.com.edu.grupo4.projetofinal.application;
 
 // OBS: coloquei o id pra começar do numero 1, alterar pra começar do 0 ?? //
+// implementar a criação de outro array quando o array atual atingir o limite? //
+// com um contador!
+//if (contadorDeContatos>=contatos.length) break; //
+// criação de um novo array //
+// drobrar o tamanho do array quando ver que ele vai estourar //
+// fazer uma cópia de todos os elementos do array antigo para o novo!!!!!!!!!!!!!!!!! //
+// pesquisar como arraylist muda de tamanho quando atinge o limite //
+
+// apagar alguem do array se n der certo?? //
 
 import br.com.edu.grupo4.projetofinal.constants.Constants;
 import java.util.Scanner;
@@ -9,7 +18,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Boolean programIsRunning = true;
-        String[][] contatos = new String[100][3];
+        int tamanhoArray = 2;
+        String[][] contatos = new String[tamanhoArray][3];
         int contadorContatos = 0;
         int id;
         String nome, telefone, email;
@@ -34,24 +44,21 @@ public class Main {
                     System.out.println("Digite o nome do contato: ");
                     nome = scanner.nextLine();
 
-                    boolean numeroValidado = false;
-                    telefone = "";
-
-                    while (!numeroValidado) {
-                        System.out.println("Digite o telefone do contato: ");
-                        telefone = scanner.nextLine();
-
-                        boolean numeroJaExiste = numeroJaExiste(telefone, contatos, contadorContatos);
-                        if (!numeroJaExiste) {
-                            numeroValidado = true;
-                        }
-                    }
+                    telefone = pegarTelefone(contatos, contadorContatos);
 
                     System.out.println("Digite o email do contato: ");
                     email = scanner.nextLine();
 
-                    adicionarContato(nome, telefone, email, contatos, contadorContatos);
-                    contadorContatos++;
+                    try {
+                        adicionarContato(nome, telefone, email, contatos, contadorContatos);
+                        contadorContatos++;
+                    } catch (ArrayIndexOutOfBoundsException err) {
+                        System.out.println("Agenda atingiu o limite, Aumentando o tamanho da sua agenda...");
+                        contatos = aumentarArray(contatos, tamanhoArray);
+                        tamanhoArray*=2;
+                        adicionarContato(nome, telefone, email, contatos, contadorContatos);
+                        contadorContatos++;
+                    }
                     break;
                 case 2:
                     System.out.print("Digite o ID do contato que deseja detalhar: ");
@@ -74,18 +81,7 @@ public class Main {
                         System.out.println("Digite o nome do contato: ");
                         nome = scanner.nextLine();
 
-                        boolean numeroValidadoEditar = false;
-                        telefone = "";
-
-                        while (!numeroValidadoEditar) {
-                            System.out.println("Digite o telefone do contato: ");
-                            telefone = scanner.nextLine();
-
-                            boolean numeroJaExiste = numeroJaExiste(telefone, contatos[id-1][1], contatos, contadorContatos);
-                            if (!numeroJaExiste) {
-                                numeroValidadoEditar = true;
-                            }
-                        }
+                        telefone = pegarTelefone(contatos, contadorContatos, id);
 
                         System.out.println("Digite o email do contato: ");
                         email = scanner.nextLine();
@@ -98,7 +94,6 @@ public class Main {
                             } else if (j == 2) {
                                 contatos[id-1][j] = email;
                             }
-
                         }
                         System.out.println("Contato editado com sucesso!");
                     }
@@ -130,13 +125,55 @@ public class Main {
         scanner.close();
     }
 
+    public static String pegarTelefone(String[][] contatos, int contadorContatos) {
+        Scanner scanner = new Scanner(System.in);
+        boolean numeroValidado = false;
+        String telefone = "";
 
-    static void adicionarContato(String nome, String telefone, String email, String[][] contatos, int contadorContatos) {
-        if (contadorContatos >= contatos.length) {
-            System.out.println("Agenda cheia! Não é possível adicionar mais contatos...");
-            return;
+        while (!numeroValidado) {
+            System.out.println("Digite o telefone do contato: ");
+            telefone = scanner.nextLine();
+
+            boolean numeroJaExiste = numeroJaExiste(telefone, contatos, contadorContatos);
+            if (!numeroJaExiste) {
+                numeroValidado = true;
+            }
         }
 
+        return telefone;
+    }
+
+    public static String pegarTelefone(String[][] contatos, int contadorContatos, int id) {
+        Scanner scanner = new Scanner(System.in);
+        boolean numeroValidadoEditar = false;
+        String telefone = "";
+
+        while (!numeroValidadoEditar) {
+            System.out.println("Digite o telefone do contato: ");
+            telefone = scanner.nextLine();
+
+            boolean numeroJaExiste = numeroJaExiste(telefone, contatos[id-1][1], contatos, contadorContatos);
+            if (!numeroJaExiste) {
+                numeroValidadoEditar = true;
+            }
+        }
+
+        return telefone;
+    }
+
+    public static String[][] aumentarArray(String[][] contatos, int novoTamanho) {
+        String[][] novoArray = new String[novoTamanho*2][3];
+
+        for (int i = 0; i < contatos.length; i++) {
+            for (int j = 0; j < contatos[i].length; j++) {
+                novoArray[i][j] = contatos[i][j];
+            }
+        }
+
+        return novoArray;
+    }
+
+    static void adicionarContato(String nome, String telefone, String email, String[][] contatos, int contadorContatos) {
         if (contatos[contadorContatos] == null) {
             contatos[contadorContatos] = new String[3];
         }
