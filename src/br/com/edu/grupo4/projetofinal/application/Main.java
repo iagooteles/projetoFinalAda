@@ -1,15 +1,6 @@
 package br.com.edu.grupo4.projetofinal.application;
 
-// OBS: coloquei o id pra começar do numero 1, alterar pra começar do 0 ?? //
-// implementar a criação de outro array quando o array atual atingir o limite? //
-// com um contador!
-//if (contadorDeContatos>=contatos.length) break; //
-// criação de um novo array //
-// drobrar o tamanho do array quando ver que ele vai estourar //
-// fazer uma cópia de todos os elementos do array antigo para o novo!!!!!!!!!!!!!!!!! //
-// pesquisar como arraylist muda de tamanho quando atinge o limite //
-
-// apagar alguem do array se n der certo?? //
+// faltam só validações!
 
 import br.com.edu.grupo4.projetofinal.constants.Constants;
 import java.util.Scanner;
@@ -42,12 +33,12 @@ public class Main {
             switch (option) {
                 case 1:
                     System.out.println("Digite o nome do contato: ");
-                    nome = scanner.nextLine();
+                    nome = pegarNome();
 
                     telefone = pegarTelefone(contatos, contadorContatos);
 
                     System.out.println("Digite o email do contato: ");
-                    email = scanner.nextLine();
+                    email = pegarEmail();
 
                     try {
                         adicionarContato(nome, telefone, email, contatos, contadorContatos);
@@ -79,12 +70,12 @@ public class Main {
                     } else {
 
                         System.out.println("Digite o nome do contato: ");
-                        nome = scanner.nextLine();
+                        nome = pegarNome();
 
                         telefone = pegarTelefone(contatos, contadorContatos, id);
 
                         System.out.println("Digite o email do contato: ");
-                        email = scanner.nextLine();
+                        email = pegarEmail();
 
                         for (int j = 0; j < 3; j++) {
                             if (j == 0) {
@@ -125,6 +116,14 @@ public class Main {
         scanner.close();
     }
 
+    public static String pegarNome() {
+        Scanner scanner = new Scanner(System.in);
+        String nome = "";
+        nome = scanner.nextLine();
+
+        return nome;
+    }
+
     public static String pegarTelefone(String[][] contatos, int contadorContatos) {
         Scanner scanner = new Scanner(System.in);
         boolean numeroValidado = false;
@@ -159,6 +158,14 @@ public class Main {
         }
 
         return telefone;
+    }
+
+    public static String pegarEmail() {
+        Scanner scanner = new Scanner(System.in);
+        String email = "";
+        email = scanner.nextLine();
+
+        return email;
     }
 
     public static String[][] aumentarArray(String[][] contatos, int novoTamanho) {
