@@ -130,11 +130,11 @@ public class Main {
         String telefone = "";
 
         while (!numeroValidado) {
-            System.out.println("Digite o telefone do contato: ");
+            System.out.println("Digite o telefone do contato (11 dígitos): ");
             telefone = scanner.nextLine();
 
             boolean numeroJaExiste = numeroJaExiste(telefone, contatos, contadorContatos);
-            if (!numeroJaExiste) {
+            if (!numeroJaExiste && telefone.length() == 11) {
                 numeroValidado = true;
             }
         }
@@ -148,11 +148,11 @@ public class Main {
         String telefone = "";
 
         while (!numeroValidadoEditar) {
-            System.out.println("Digite o telefone do contato: ");
+            System.out.println("Digite o telefone do contato (11 dígitos): ");
             telefone = scanner.nextLine();
 
             boolean numeroJaExiste = numeroJaExiste(telefone, contatos[id-1][1], contatos, contadorContatos);
-            if (!numeroJaExiste) {
+            if (!numeroJaExiste && telefone.length() == 11) {
                 numeroValidadoEditar = true;
             }
         }
